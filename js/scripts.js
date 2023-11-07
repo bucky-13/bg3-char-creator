@@ -1,3 +1,4 @@
+// Object for keeping track of all the numbers on the page
 let attributes = {
   abilityPointsTotal: 27,
   str: {
@@ -50,6 +51,7 @@ let attributes = {
   },
 };
 
+// ALL the querySelectors for the page
 const abilityPointsCount = document.querySelector("#ability-points-count");
 const strMinus = document.querySelector("#btn-str-minus");
 const strPlus = document.querySelector("#btn-str-plus");
@@ -84,6 +86,10 @@ const chaScoreDisplayed = document.querySelector("#cha-score-displayed");
 
 const plus1 = document.querySelectorAll("input[name='plus1']");
 const plus2 = document.querySelectorAll("input[name='plus2']");
+
+//Functions
+
+//Function for adding a point to an ability
 function addPoint(a, d) {
   if (a.baseValue < 13 && attributes.abilityPointsTotal > 0) {
     a.baseValue++;
@@ -97,6 +103,8 @@ function addPoint(a, d) {
     abilityPointsCount.innerHTML = attributes.abilityPointsTotal;
   }
 }
+
+//Function for removing a point from an ability
 function removePoint(a, d) {
   if (
     a.baseValue > 8 &&
@@ -119,17 +127,7 @@ function removePoint(a, d) {
   }
 }
 
-function checkBox1(a, d, plus1, plus2) {
-  if (plus1.checked == false && plus2.checked == false) {
-    a.modifier1--;
-    d.innerHTML = a.totalValue;
-    console.log("test1");
-  } else if (plus1.checked == true && plus2.checked == false) {
-    a.modifier1++;
-    d.innerHTML = a.totalValue;
-    console.log("test2");
-  }
-}
+//Function for checking a +1 bonus radio button, also removes the point from all other buttons
 
 function plus1Radio(radio) {
   for (let i = 0; i < radio.length; i++) {
@@ -146,6 +144,8 @@ function plus1Radio(radio) {
     }
   }
 }
+
+//Function for checking a +2 bonus radio button, also removes the point from all other buttons
 function plus2Radio(radio) {
   for (let i = 0; i < radio.length; i++) {
     let abi = radio[i].value;
@@ -161,6 +161,8 @@ function plus2Radio(radio) {
     }
   }
 }
+
+//Event listeners for the + / - buttons for each ability
 
 strPlus.addEventListener("click", function () {
   addPoint(attributes.str, strScoreDisplayed);
@@ -198,6 +200,8 @@ chaPlus.addEventListener("click", function () {
 chaMinus.addEventListener("click", function () {
   removePoint(attributes.cha, chaScoreDisplayed);
 });
+
+//Event listeners for the radio buttons
 
 plus1.forEach((plus) =>
   plus.addEventListener("click", function () {
