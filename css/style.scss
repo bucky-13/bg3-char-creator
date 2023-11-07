@@ -1,0 +1,48 @@
+body {
+  background-color: black;
+  color: antiquewhite;
+  display: flex;
+
+  justify-content: center;
+  align-content: center;
+  .ability-container {
+    border: 1px solid brown;
+
+    .ability-header {
+      display: grid;
+      grid-template-rows: repeat(3, 60px);
+      align-items: center;
+      justify-items: center;
+    }
+    .ability-grid {
+      height: 700px;
+      width: 800px;
+      display: grid;
+      grid-template-rows: 120px repeat(7, 80px);
+      align-items: start;
+
+      .ability-grid-row {
+        // border: 1px solid red;
+        display: grid;
+        grid-template-columns: 100px 200px 100px 100px 100px 100px 100px;
+        align-items: center;
+        justify-items: center;
+        p {
+          font-size: 1.5rem;
+        }
+        .btn-plus-minus {
+          background-color: brown;
+          width: 40px;
+          height: 40px;
+          color: white;
+          font-size: 2rem;
+          border: 3px solid burlywood;
+          border-radius: 50%;
+        }
+        input {
+          background-color: brown;
+        }
+      }
+    }
+  }
+}
