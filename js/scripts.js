@@ -1,5 +1,3 @@
-console.log("test");
-
 let attributes = {
   abilityPointsTotal: 27,
   str: {
@@ -84,6 +82,8 @@ const abilityCha1 = document.querySelector("#ability-cha-1");
 const abilityCha2 = document.querySelector("#ability-cha-2");
 const chaScoreDisplayed = document.querySelector("#cha-score-displayed");
 
+const plus1 = document.querySelectorAll("input[name='plus1']");
+const plus2 = document.querySelectorAll("input[name='plus2']");
 function addPoint(a, d) {
   if (a.baseValue < 13 && attributes.abilityPointsTotal > 0) {
     a.baseValue++;
@@ -116,6 +116,49 @@ function removePoint(a, d) {
     d.innerHTML = a.totalValue;
     attributes.abilityPointsTotal += 2;
     abilityPointsCount.innerHTML = attributes.abilityPointsTotal;
+  }
+}
+
+function checkBox1(a, d, plus1, plus2) {
+  if (plus1.checked == false && plus2.checked == false) {
+    a.modifier1--;
+    d.innerHTML = a.totalValue;
+    console.log("test1");
+  } else if (plus1.checked == true && plus2.checked == false) {
+    a.modifier1++;
+    d.innerHTML = a.totalValue;
+    console.log("test2");
+  }
+}
+
+function plus1Radio(radio) {
+  for (let i = 0; i < radio.length; i++) {
+    let abi = radio[i].value;
+    let html = `${radio[i].value}-score-displayed`;
+    if (radio[i].checked == true) {
+      attributes[abi].modifier1 = 1;
+      const htmlScore = document.querySelector(`#${html}`);
+      htmlScore.innerHTML = attributes[abi].totalValue;
+    } else if (radio[i].checked == false) {
+      attributes[abi].modifier1 = 0;
+      const htmlScore = document.querySelector(`#${html}`);
+      htmlScore.innerHTML = attributes[abi].totalValue;
+    }
+  }
+}
+function plus2Radio(radio) {
+  for (let i = 0; i < radio.length; i++) {
+    let abi = radio[i].value;
+    let html = `${radio[i].value}-score-displayed`;
+    if (radio[i].checked == true) {
+      attributes[abi].modifier2 = 2;
+      const htmlScore = document.querySelector(`#${html}`);
+      htmlScore.innerHTML = attributes[abi].totalValue;
+    } else if (radio[i].checked == false) {
+      attributes[abi].modifier2 = 0;
+      const htmlScore = document.querySelector(`#${html}`);
+      htmlScore.innerHTML = attributes[abi].totalValue;
+    }
   }
 }
 
@@ -155,3 +198,14 @@ chaPlus.addEventListener("click", function () {
 chaMinus.addEventListener("click", function () {
   removePoint(attributes.cha, chaScoreDisplayed);
 });
+
+plus1.forEach((plus) =>
+  plus.addEventListener("click", function () {
+    plus1Radio(plus1);
+  })
+);
+plus2.forEach((plus) =>
+  plus.addEventListener("click", function () {
+    plus2Radio(plus2);
+  })
+);
