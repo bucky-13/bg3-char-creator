@@ -182,7 +182,7 @@ function plus2Radio(radio) {
 }
 
 //Since we can't have both radios for an attribute selected, these functions make sure this cannot happen.
-//TODO: turn them into one function with additional parameters.
+//TODO: turn them into one function with additional parameters. FIX variable names so it makes sense
 
 function radio2Checker(radio2, radio1) {
   let plus2boolean = [];
