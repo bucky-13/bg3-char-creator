@@ -102,9 +102,8 @@ const dummyScoreDisplayed = document.querySelector('#dummy-score-displayed');
 
 const plus1 = document.querySelectorAll("input[name='plus1']");
 const plus2 = document.querySelectorAll("input[name='plus2']");
-var lastActivePlus1Radio = [0, "dummy"];
-var lastActivePlus2Radio = [0, "dummy"];
-
+var lastActivePlus1Radio = [0, 'dummy'];
+var lastActivePlus2Radio = [0, 'dummy'];
 
 //Functions
 
@@ -164,7 +163,7 @@ function plus1Radio(radio) {
   }
 }
 
-//Function for checking a +2 bonus radio button, also removes the point from all other buttons
+//Function for checking a +2 bonus radio button, also removes the points from all other buttons
 function plus2Radio(radio) {
   for (let i = 0; i < radio.length; i++) {
     let abi = radio[i].value;
@@ -184,61 +183,53 @@ function plus2Radio(radio) {
 //Since we can't have both radios for an attribute selected, these functions make sure this cannot happen.
 //TODO: turn them into one function with additional parameters. FIX variable names so it makes sense
 
-function radio2Checker(radio2, radio1) {
-  let plus2boolean = [];
-  let plus1boolean = [];
-  let plus2value = [];
-  let radio2html = radio2;
-    let indexObject = document.querySelector("input[name='plus2']:checked");
- let indexValue = indexObject.value
+function radioChecker(
+  activeRadioColumn,
+  inactiveRadioColumn,
+  int,
+  lastActivePlusRadio
+) {
+  let activePlusBoolean = [];
+  let inactivePlusBoolean = [];
 
-  for (let i = 0; i < radio2.length; i++) {
-    plus2boolean.push(radio2[i].checked);
-    plus2value.push(radio2[i].value);
-    plus1boolean.push(radio1[i].checked);
-    let indexNo = attributes[indexValue].index;
+  for (let i = 0; i < activeRadioColumn.length; i++) {
+    activePlusBoolean.push(activeRadioColumn[i].checked);
+    inactivePlusBoolean.push(inactiveRadioColumn[i].checked);
+    let modifier = `modifier${int}`;
 
-    if (plus2boolean[i] === true && plus1boolean[i] === true) {
-      let abi = radio2[i].value;
-      const htmlScore = document.querySelector(`#${radio2[i].value}-score-displayed`);
-      const lastActiveScoreDisplayed = document.querySelector(`#${lastActivePlus2Radio[1]}-score-displayed`);
-      attributes[abi].modifier2 = 0;
-      radio2html[lastActivePlus2Radio[0]].checked = true;
-      attributes[lastActivePlus2Radio[1]].modifier2 = 2;
-      lastActiveScoreDisplayed.innerHTML = attributes[lastActivePlus2Radio[1]].totalValue;
+    if (activePlusBoolean[i] === true && inactivePlusBoolean[i] === true) {
+      let abi = activeRadioColumn[i].value;
+      const htmlScore = document.querySelector(
+        `#${activeRadioColumn[i].value}-score-displayed`
+      );
+      const lastActiveScoreDisplayed = document.querySelector(
+        `#${lastActivePlusRadio[1]}-score-displayed`
+      );
+      attributes[abi][modifier] = 0;
+      activeRadioColumn[lastActivePlusRadio[0]].checked = true;
+      attributes[lastActivePlusRadio[1]][modifier] = int;
+      lastActiveScoreDisplayed.innerHTML =
+        attributes[lastActivePlusRadio[1]].totalValue;
       htmlScore.innerHTML = attributes[abi].totalValue;
-
-    } else if (plus2boolean[i] === false && plus1boolean[i] === true) {
-      lastActivePlus2Radio = [indexNo, indexValue];
-    }
-  }
-}
-function radio1Checker(radio2, radio1) {
-  let plus2boolean = [];
-  let plus1boolean = [];
-  let plus2value = [];
-  let radio2html = radio2;
-  let indexObject = document.querySelector("input[name='plus1']:checked");
- let indexValue = indexObject.value
-
-  for (let i = 0; i < radio2.length; i++) {
-    plus2boolean.push(radio2[i].checked);
-    plus2value.push(radio2[i].value);
-    plus1boolean.push(radio1[i].checked);
-    let indexNo = attributes[indexValue].index;
-
-    if (plus2boolean[i] === true && plus1boolean[i] === true) {
-      let abi = radio2[i].value;
-      const htmlScore = document.querySelector(`#${radio2[i].value}-score-displayed`);
-      const lastActiveScoreDisplayed = document.querySelector(`#${lastActivePlus1Radio[1]}-score-displayed`);
-      attributes[abi].modifier1 = 0;
-      radio2html[lastActivePlus1Radio[0]].checked = true;
-      attributes[lastActivePlus1Radio[1]].modifier1 = 1;
-      lastActiveScoreDisplayed.innerHTML = attributes[lastActivePlus1Radio[1]].totalValue;
-      htmlScore.innerHTML = attributes[abi].totalValue;
-
-    } else if (plus2boolean[i] === false && plus1boolean[i] === true) {
-      lastActivePlus1Radio = [indexNo, indexValue];
+    } else if (
+      activePlusBoolean[i] === false &&
+      inactivePlusBoolean[i] === true
+    ) {
+      if (int === 2) {
+        let indexObjectChecked = document.querySelector(
+          "input[name='plus2']:checked"
+        );
+        let indexValueChecked = indexObjectChecked.value;
+        let indexNumChecked = attributes[indexValueChecked].index;
+        lastActivePlus2Radio = [indexNumChecked, indexValueChecked];
+      } else if (int === 1) {
+        let indexObjectChecked = document.querySelector(
+          "input[name='plus1']:checked"
+        );
+        let indexValueChecked = indexObjectChecked.value;
+        let indexNumChecked = attributes[indexValueChecked].index;
+        lastActivePlus1Radio = [indexNumChecked, indexValueChecked];
+      }
     }
   }
 }
@@ -287,12 +278,12 @@ chaMinus.addEventListener('click', function () {
 plus1.forEach((plus) =>
   plus.addEventListener('click', function () {
     plus1Radio(plus1);
-    radio1Checker(plus1, plus2);
+    radioChecker(plus1, plus2, 1, lastActivePlus1Radio);
   })
 );
 plus2.forEach((plus) =>
   plus.addEventListener('click', function () {
     plus2Radio(plus2);
-    radio2Checker(plus2, plus1);
+    radioChecker(plus2, plus1, 2, lastActivePlus2Radio);
   })
 );
